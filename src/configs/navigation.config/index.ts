@@ -18,7 +18,7 @@ const navigationConfig: NavigationTree[] = [
         subMenu: [],
     },    {
         key: 'Chat',
-        path: '/chat',
+        path: '/Chat',
         title: 'Chat',
         translateKey: 'nav.chat',
         icon: 'chat',
