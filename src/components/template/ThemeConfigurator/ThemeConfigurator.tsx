@@ -14,24 +14,24 @@ const ThemeConfigurator = ({ callBackClose }: ThemeConfiguratorProps) => {
             <div className="flex flex-col gap-y-10 mb-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h6>Dark Mode</h6>
-                        <span>Switch theme to dark mode</span>
+                        <h6>Modo oscuro</h6>
+                        <span>Cambiar tema a modo oscuro</span>
                     </div>
                     <ModeSwitcher />
                 </div>
                 <div className="flex items-center justify-between">
                     <div>
-                        <h6>Direction</h6>
-                        <span>Select a direction</span>
+                        <h6>Dirección</h6>
+                        <span>Selecciona una dirección</span>
                     </div>
                     <DirectionSwitcher callBackClose={callBackClose} />
                 </div>
                 <div>
-                    <h6 className="mb-3">Theme</h6>
+                    <h6 className="mb-3">Tema</h6>
                     <ThemeSwitcher />
                 </div>
                 <div>
-                    <h6 className="mb-3">Layout</h6>
+                    <h6 className="mb-3">Diseño</h6>
                     <LayoutSwitcher />
                 </div>
             </div>

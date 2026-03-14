@@ -35,7 +35,7 @@ export const themeConfig: ThemeConfig = ${JSON.stringify(config, null, 2)}
 
     return (
         <Button block variant="solid" onClick={handleCopy}>
-            Copy config
+            Copiar configuración
         </Button>
     )
 }

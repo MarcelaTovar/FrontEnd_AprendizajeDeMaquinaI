@@ -5,20 +5,20 @@ export const mesesAbrev = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep'
 
 export const planesDisponibles: Plan[] = [
     {
-        id: 'basico',
-        nombre: 'Básico',
+        id: 'lite',
+        nombre: 'Lite',
         descripcion: 'Perfecto para empezar',
         recomendado: false,
-        precio: { mensual: 9.99, anual: 99.99 },
+        precio: { mensual: 0, anual: 0 },
         caracteristicas: ['acceso_basico', 'soporte_email', '1_usuario'],
     },
     {
         id: 'pro',
-        nombre: 'Pro',
+        nombre: 'Pro (Full)',
         descripcion: 'Para equipos en crecimiento',
         recomendado: true,
         precio: { mensual: 29.99, anual: 299.99 },
-        caracteristicas: ['acceso_basico', 'soporte_email', 'soporte_prioritario', '5_usuarios', 'reportes'],
+        caracteristicas: ['acceso_basico', 'soporte_email', 'soporte_prioritario', '5_usuarios', 'reportes', 'modelo_pesado'],
     },
     {
         id: 'empresarial',
@@ -26,7 +26,7 @@ export const planesDisponibles: Plan[] = [
         descripcion: 'Para grandes organizaciones',
         recomendado: false,
         precio: { mensual: 79.99, anual: 799.99 },
-        caracteristicas: ['acceso_basico', 'soporte_email', 'soporte_prioritario', 'soporte_24_7', 'usuarios_ilimitados', 'reportes', 'api_acceso'],
+        caracteristicas: ['acceso_basico', 'soporte_email', 'soporte_prioritario', 'soporte_24_7', 'usuarios_ilimitados', 'reportes', 'api_acceso', 'modelo_pesado'],
     },
 ]
 
@@ -40,6 +40,7 @@ export const listaCaracteristicas = [
     { id: 'usuarios_ilimitados', descripcion: 'Usuarios ilimitados' },
     { id: 'reportes',            descripcion: 'Reportes avanzados' },
     { id: 'api_acceso',          descripcion: 'Acceso a API' },
+    { id: 'modelo_pesado',       descripcion: 'Modelo de IA avanzado (mayor precisión diagnóstica)' },
 ]
 
 export const mockFacturacion: DatosFacturacion = {
