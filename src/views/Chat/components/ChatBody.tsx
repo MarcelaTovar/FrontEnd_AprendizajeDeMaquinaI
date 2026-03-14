@@ -1,73 +1,74 @@
 import { useState, useEffect, useRef } from 'react'
 import Avatar from '@/components/ui/Avatar'
 import Card from '@/components/ui/Card'
-import ChatBox from '@/components/view/ChatBox'
+import ChatBox, { type MessageList as ChatBoxMessageList } from '@/components/view/ChatBox'
 import { useChatStore } from '../store/chatStore'
 import classNames from '@/utils/classNames'
 import uniqueId from 'lodash/uniqueId'
 import useMessage from '../hooks/useMessages'
-import { Message } from '@/@types/types'
+import type { Message as BackendMessage } from '@/@types/types'
 
 const ChatBody = () => {
     const scrollRef = useRef<any>(null)
     const selectedChat = useChatStore((state) => state.selectedChat)
-    const [conversation, setConversation] = useState<Message[]>([])
+    const [localMessages, setLocalMessages] = useState<ChatBoxMessageList>([])
     const messagesRecord = useChatStore((state) => state.MessagesRecord)
-    const messageFetched = useChatStore((state) => state.messageFetched)
     const { fetchMessage } = useMessage()
 
-    // Función para adaptar mensajes del backend
-    const adaptMessages = (messages: Message[]): any[] =>
-        messages.map((msg, idx) => ({
-            id: uniqueId('msg-'),
-            sender: {
-                id: msg.senderId,
-                name: msg.senderId === 'user' ? 'Tú' : 'Asistente IA',
-                avatarImageUrl: msg.isAI ? '/bot.png' : undefined,
-            },
-            content: msg.content,
-            timestamp: new Date(msg.sendTime),
-            isMyMessage: msg.isAI,
-            showAvatar: true,
-        }));
+        const adaptMessages = (messages: BackendMessage[]): ChatBoxMessageList =>
+            messages.map((msg) => ({
+                id: uniqueId('msg-'),
+                sender: {
+                    id: msg.senderId,
+                    name: msg.senderId === 'user' ? 'Tú' : 'Asistente IA',
+                    avatarImageUrl: msg.isAI ? '/bot.png' : undefined,
+                },
+                content: msg.content,
+                timestamp: new Date(msg.sendTime),
+                type: 'regular',
+                isMyMessage: msg.senderId === 'user',
+                showAvatar: msg.senderId !== 'user',
+                avatarGap: msg.senderId !== 'user',
+            }))
         
 
     useEffect(() => {
-        const selectedChatId = selectedChat && 'id' in selectedChat ? selectedChat.id : null;
-    if (selectedChatId) {
-        (async () => {
-            await fetchMessage(selectedChatId);
-            console.log('Messages record:', adaptMessages(messagesRecord));
-            setConversation(messagesRecord ? adaptMessages(messagesRecord) : []);
-        })();
-    }
+        const selectedChatId = selectedChat && 'id' in selectedChat ? selectedChat.id : null
+        if (selectedChatId) {
+            fetchMessage(selectedChatId)
+        }
+        setLocalMessages([])
     }, [selectedChat && 'id' in selectedChat ? selectedChat.id : null])
 
     const handleInputChange = async ({ value }: { value: string }) => {
         if (!value.trim()) return
-        const newMessage = {
+        const newMessage: ChatBoxMessageList[number] = {
             id: uniqueId('user-msg-'),
             sender: { id: 'user', name: 'Tú' },
             content: value,
             timestamp: new Date(),
+            type: 'regular',
             isMyMessage: true,
+            showAvatar: false,
+            avatarGap: false,
         }
-
-        setConversation((prev) => [...prev, newMessage])
-
+        setLocalMessages((prev) => [...prev, newMessage])
         setTimeout(() => {
-            const botResponse = {
+            const botResponse: ChatBoxMessageList[number] = {
                 id: uniqueId('bot-msg-'),
                 sender: {
                     id: 'bot',
                     name: 'Asistente IA',
-                    avatarImageUrl: '/bot.png'
+                    avatarImageUrl: '/bot.png',
                 },
                 content: "¡Hola! Estoy procesando tu consulta con el sistema RAG. Dame un momento...",
                 timestamp: new Date(),
+                type: 'regular',
                 isMyMessage: false,
+                showAvatar: true,
+                avatarGap: true,
             }
-            setConversation((prev) => [...prev, botResponse])
+            setLocalMessages((prev) => [...prev, botResponse])
         }, 800)
     }
 
@@ -92,6 +93,11 @@ const ChatBody = () => {
         },
     }
 
+    // Combina mensajes del backend y locales
+    const combinedMessages = [
+        ...(messagesRecord ? adaptMessages(messagesRecord) : []),
+        ...localMessages,
+    ]
     return (
         <div className={classNames('w-full h-full', !(selectedChat && 'id' in selectedChat) && 'hidden')}>
             {(selectedChat && 'id' in selectedChat) ? (
@@ -105,7 +111,7 @@ const ChatBody = () => {
                             containerClass="flex flex-col flex-1 h-full"
                             messageListClass="flex-1 relative"
                             ref={scrollRef}
-                            messageList={conversation}
+                            messageList={combinedMessages}
                             placeholder="Escribe tu consulta aquí..."
                             onInputChange={handleInputChange}
                         />
