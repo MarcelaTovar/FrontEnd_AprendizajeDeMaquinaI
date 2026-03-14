@@ -3,101 +3,81 @@
 @tailwind utilities;
 
 @layer base {
-	:root {
-		--neutral: #ffffff;
-		--primary: #2a85ff;
-		--primary-deep: #0069f6;
-		--primary-mild: #4996ff;
-		--primary-subtle: #2a85ff1a;
-		--error: #ff6a55;
-		--error-subtle: #ff6a551a;
-		--success: #10b981;
-		--success-subtle: #05eb7624;
-		--info: #2a85ff;
-		--info-subtle: #2a85ff1a;
-		--warning: #f59e0b;
-		--warning-subtle: #ffd40045;
-		--gray-50: #fafafa;
-		--gray-100: #f5f5f5;
-		--gray-200: #e5e5e5;
-		--gray-300: #d4d4d4;
-		--gray-400: #a3a3a3;
-		--gray-500: #737373;
-		--gray-600: #525252;
-		--gray-700: #404040;
-		--gray-800: #262626;
-		--gray-900: #171717;
-		--gray-950: #0a0a0a;
-	}
+    :root {
+        --neutral: #ffffff;
+        --primary: #0077B6;
+        --primary-deep: #03045E;
+        --primary-mild: #00B4D8;
+        --primary-subtle: #0077B61a;
+        --error: #ff6a55;
+        --error-subtle: #ff6a551a;
+        --success: #10b981;
+        --success-subtle: #05eb7624;
+        --info: #00B4D8;
+        --info-subtle: #00B4D81a;
+        --warning: #f59e0b;
+        --warning-subtle: #ffd40045;
+        --gray-50: #fafafa;
+        --gray-100: #f5f5f5;
+        --gray-200: #e5e5e5;
+        --gray-300: #d4d4d4;
+        --gray-400: #a3a3a3;
+        --gray-500: #737373;
+        --gray-600: #525252;
+        --gray-700: #404040;
+        --gray-800: #262626;
+        --gray-900: #171717;
+        --gray-950: #0a0a0a;
+    }
 
-	.dark {
-		--neutral: #ffffff;
-		--primary: #2a85ff;
-		--primary-deep: #0069f6;
-		--primary-mild: #4996ff;
-		--primary-subtle: #2a85ff1a;
-		--error: #ff6a55;
-		--error-subtle: #ff6a551a; 
-		--success: #10b981;
-		--success-subtle: #05eb7624;
-		--info: #2a85ff;
-		--info-subtle: #2a85ff1a;
-		--warning: #f59e0b;
-		--warning-subtle: #ffd40045;
-		--gray-50: #fafafa;
-		--gray-100: #f5f5f5;
-		--gray-200: #e5e5e5;
-		--gray-300: #d4d4d4;
-		--gray-400: #a3a3a3;
-		--gray-500: #737373;
-		--gray-600: #525252;
-		--gray-700: #404040;
-		--gray-800: #262626;
-		--gray-900: #171717;
-		--gray-950: #0a0a0a;
-	}
+    .dark {
+        --neutral: #ffffff;
+        --primary: #00B4D8;
+        --primary-deep: #0077B6;
+        --primary-mild: #90E0EF;
+        --primary-subtle: #00B4D81a;
+        --error: #ff6a55;
+        --error-subtle: #ff6a551a;
+        --success: #10b981;
+        --success-subtle: #05eb7624;
+        --info: #90E0EF;
+        --info-subtle: #90E0EF1a;
+        --warning: #f59e0b;
+        --warning-subtle: #ffd40045;
+        --gray-50: #fafafa;
+        --gray-100: #f5f5f5;
+        --gray-200: #e5e5e5;
+        --gray-300: #d4d4d4;
+        --gray-400: #a3a3a3;
+        --gray-500: #737373;
+        --gray-600: #525252;
+        --gray-700: #404040;
+        --gray-800: #262626;
+        --gray-900: #171717;
+        --gray-950: #0a0a0a;
+    }
 
+    body {
+        @apply text-gray-500 dark:text-gray-400 text-sm bg-gray-100 dark:bg-gray-950 leading-normal font-medium;
+        -webkit-font-smoothing: antialiased;
+    }
 
-	body {
-		@apply text-gray-500 dark:text-gray-400 text-sm bg-gray-100 dark:bg-gray-950 leading-normal font-medium;
-		-webkit-font-smoothing: antialiased;
-	}
+    h1, .h1 { @apply text-4xl font-bold; color: #03045E; }
+    h2, .h2 { @apply text-3xl font-bold; color: #03045E; }
+    h3, .h3 { @apply text-2xl font-bold; color: #0077B6; }
+    h4, .h4 { @apply text-xl font-bold; color: #0077B6; }
+    h5, .h5 { @apply text-lg font-bold; color: #0077B6; }
+    h6, .h6 { @apply text-base font-semibold; color: #00B4D8; }
 
-	h1,
-	.h1 {
-		@apply text-4xl font-bold text-gray-900 dark:text-gray-100;
-	}
+    .dark h1, .dark .h1 { color: #CAF0F8; }
+    .dark h2, .dark .h2 { color: #CAF0F8; }
+    .dark h3, .dark .h3 { color: #90E0EF; }
+    .dark h4, .dark .h4 { color: #90E0EF; }
+    .dark h5, .dark .h5 { color: #90E0EF; }
+    .dark h6, .dark .h6 { color: #00B4D8; }
 
-	h2,
-	.h2 {
-		@apply text-3xl font-bold text-gray-900 dark:text-gray-100;
-	}
+    hr { @apply border-gray-200 dark:border-gray-600; }
 
-	h3,
-	.h3 {
-		@apply text-2xl font-bold text-gray-900 dark:text-gray-100;
-	}
-
-	h4,
-	.h4 {
-		@apply text-xl font-bold text-gray-900 dark:text-gray-100;
-	}
-
-	h5,
-	.h5 {
-		@apply text-lg font-bold text-gray-900 dark:text-gray-100;
-	}
-
-	h6,
-	.h6 {
-		@apply text-base font-semibold text-gray-900 dark:text-gray-100;
-	}
-
-	hr {
-		@apply border-gray-200 dark:border-gray-600;
-	}
-
-	.heading-text {
-		@apply text-gray-900 dark:text-gray-100;
-	}
+    .heading-text { color: #03045E; }
+    .dark .heading-text { color: #CAF0F8; }
 }
