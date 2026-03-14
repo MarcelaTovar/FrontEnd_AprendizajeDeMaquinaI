@@ -41,9 +41,8 @@ const ChatBody = () => {
         setLocalMessages([])
     }, [selectedChat && 'id' in selectedChat ? selectedChat.id : null])
 
-    // Elimina el mensaje de 'procesando' cuando llega la respuesta real
     useEffect(() => {
-        setLocalMessages((prev) => prev.filter(msg => msg.id !== 'processing-bot'))
+        setLocalMessages([])
     }, [messagesRecord])
 
     const handleInputChange = async ({ value }: { value: string }) => {
@@ -59,7 +58,6 @@ const ChatBody = () => {
             avatarGap: false,
         }
         setLocalMessages((prev) => [...prev, newMessage])
-        // Mensaje de bot 'procesando'
         const botProcessing: ChatBoxMessageList[number] = {
             id: 'processing-bot',
             sender: {
@@ -79,7 +77,10 @@ const ChatBody = () => {
         if (selectedChatId) {
             try {
                 await sendChatMessage(selectedChatId, { content: value })
-                fetchMessage(selectedChatId)
+                setTimeout(async () => { 
+                    await fetchMessage(selectedChatId)
+                    setLocalMessages((prev) => prev.filter(msg => msg.id !== 'processing-bot'))
+                }, 1000)
             } catch (error) {
                 setLocalMessages((prev) => prev.filter(msg => msg.id !== 'processing-bot'))
                 const errorMsg: ChatBoxMessageList[number] = {
@@ -122,11 +123,24 @@ const ChatBody = () => {
         },
     }
 
-    // Combina mensajes del backend y locales
     const combinedMessages = [
         ...(messagesRecord ? adaptMessages(messagesRecord) : []),
         ...localMessages,
     ]
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            if (scrollRef.current.scrollToBottom) {
+                scrollRef.current.scrollToBottom()
+            } else if (scrollRef.current.scrollHeight) {
+                scrollRef.current.scrollTo({
+                    top: scrollRef.current.scrollHeight,
+                    behavior: 'smooth',
+                })
+            }
+        }
+    }, [combinedMessages])
+
     return (
         <div className={classNames('w-full h-full', !(selectedChat && 'id' in selectedChat) && 'hidden')}>
             {(selectedChat && 'id' in selectedChat) ? (
