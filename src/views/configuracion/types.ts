@@ -1,4 +1,4 @@
-export type Vista = 'perfil' | 'facturacion' | 'tema'
+export type Vista = 'perfil' | 'facturacion' | 'tema' | 'personalizacion'
 export type CiclosPago = 'mensual' | 'anual'
 
 export type SettingsStore = {

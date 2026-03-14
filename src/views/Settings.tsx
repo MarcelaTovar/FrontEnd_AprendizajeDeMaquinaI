@@ -1,10 +1,11 @@
 import { Suspense } from 'react'
 import AdaptiveCard from '@/components/shared/AdaptiveCard'
-import { useSettingsStore } from './rafa/store/settingsStore'
-import MenuLateral from './rafa/components/MenuLateral'
-import VistaPerfil from './rafa/components/VistaPerfil'
-import VistaFacturacion from './rafa/components/VistaFacturacion'
-import VistaTema from './rafa/components/VistaTema'
+import { useSettingsStore } from './configuracion/store/settingsStore'
+import MenuLateral from './configuracion/components/MenuLateral'
+import VistaPerfil from './configuracion/components/VistaPerfil'
+import VistaFacturacion from './configuracion/components/VistaFacturacion'
+import VistaTema from './configuracion/components/VistaTema'
+import VistaPersonalizacion from './configuracion/components/VistaPersonalizacion' 
 
 const Settings = () => {
     const { vistaActual } = useSettingsStore()
@@ -18,6 +19,7 @@ const Settings = () => {
                         {vistaActual === 'perfil'      && <VistaPerfil />}
                         {vistaActual === 'facturacion' && <VistaFacturacion />}
                         {vistaActual === 'tema'        && <VistaTema />}
+                        {vistaActual === 'personalizacion' && <VistaPersonalizacion />}
                     </Suspense>
                 </div>
             </div>

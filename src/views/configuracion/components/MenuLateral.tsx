@@ -1,12 +1,13 @@
-import { TbPalette, TbUser, TbCreditCard } from 'react-icons/tb'
+import { TbPalette, TbUser, TbCreditCard, TbAdjustments } from 'react-icons/tb'
 import { useSettingsStore } from '../store/settingsStore'
 import useResponsive from '@/utils/hooks/useResponsive'
 import type { Vista } from '../types'
 
 const itemsMenu = [
-    { key: 'perfil',      label: 'Perfil',      icon: <TbUser size={18} /> },
-    { key: 'facturacion', label: 'Facturación', icon: <TbCreditCard size={18} /> },
-    { key: 'tema',        label: 'Tema',        icon: <TbPalette size={18} /> },
+    { key: 'perfil',          label: 'Perfil',          icon: <TbUser size={18} /> },
+    { key: 'facturacion',     label: 'Facturación',     icon: <TbCreditCard size={18} /> },
+    { key: 'personalizacion', label: 'Personalización', icon: <TbAdjustments size={18} /> },
+    { key: 'tema',            label: 'Tema',            icon: <TbPalette size={18} /> },
 ] as const
 
 const MenuLateral = () => {
