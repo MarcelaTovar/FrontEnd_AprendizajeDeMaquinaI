@@ -1,21 +1,22 @@
 import Button from '@/components/ui/Button'
 import { useChatStore } from '../store/chatStore'
 import uniqueId from 'lodash/uniqueId'
+import { createChat } from '@/services/ChatService'
+import useChat from '../hooks/useChat'
+
 
 const NewChat = () => {
     const setSelectedChat = useChatStore((state) => state.setSelectedChat)
+    const { fetchChats } = useChat()
 
-    const handleStartNewChat = () => {
-        // Al hacer clic, definimos un "chat" por defecto que es nuestro Bot
-        setSelectedChat({
-            id: uniqueId('session-'), // Genera un ID único para la sesión actual
-            chatType: 'personal',
-            user: {
-                id: 'bot-1',
-                name: 'IA Assistant', // El nombre que verá el usuario
-                avatarImageUrl: '/bot.png', // Cambia por un icono de bot
-            }
-        })
+    const handleStartNewChat = async () => {
+        // Aquí puedes personalizar los datos del nuevo chat
+        const chatData = {
+            title: 'Nuevo chat',
+        }
+        const newChat = await createChat(chatData)
+        await fetchChats()
+        setSelectedChat(newChat)
     }
 
     return (
