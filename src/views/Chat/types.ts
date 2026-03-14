@@ -1,3 +1,4 @@
+
 export type ChatType = 'personal' | 'groups'
 
 export type Chat = {
@@ -12,7 +13,6 @@ export type Chat = {
     chatType: ChatType
     groupId: string
 }
-
 export type Message = {
     id: string
     sender: {
@@ -30,22 +30,6 @@ export type Message = {
     type: 'regular' | 'reply' | 'deleted' | 'divider'
     isMyMessage: boolean
     showAvatar?: boolean
-}
-
-export type SelectedChat = {
-    id?: string
-    user?: {
-        id: string
-        name: string
-        avatarImageUrl: string
-    }
-    muted?: boolean
-    chatType?: ChatType
-    members?: {
-        id: string
-        name: string
-        avatarImageUrl: string
-    }
 }
 
 export type Messages = Message[]

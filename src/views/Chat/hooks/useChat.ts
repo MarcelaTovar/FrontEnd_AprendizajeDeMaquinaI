@@ -5,7 +5,6 @@ import { ChatListResponse } from '@/@types/types'
 
 async function getChats() {
     const data = await getChatList()
-    console.log('Fetched chats:', data)
     return data
 }
 

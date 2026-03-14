@@ -60,7 +60,7 @@ export async function createChatMessage(data: MessageCreate) {
 }
 
 export async function readChatMessage(chatId: string | number) {
-    return ApiService.fetchDataWithAxios<Message[]>({
+    return ApiService.fetchDataWithAxios<ChatWithMessages>({
         url: endpointConfig.chatMessageRead(String(chatId)),
         method: 'get',
     })

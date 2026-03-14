@@ -9,11 +9,12 @@ export type User = {
 // --- Chat Types ---
 
 export type ChatSummary = {
-    id: string | number
+    id: string
     title: string
     ownerId: string
     participantA: string
     participantB: string
+    time: number
 }
 
 export type ChatListResponse = {

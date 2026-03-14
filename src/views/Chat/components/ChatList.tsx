@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from 'react'
 import Avatar from '@/components/ui/Avatar'
 import Badge from '@/components/ui/Badge'
 import ScrollBar from '@/components/ui/ScrollBar'
-import ChatSegment from './ChatSegment'
 import NewChat from './NewChat'
 import { useChatStore } from '../store/chatStore'
 import useChat from '../hooks/useChat'
@@ -10,8 +9,8 @@ import classNames from '@/utils/classNames'
 import useDebounce from '@/utils/hooks/useDebounce'
 import { TbVolumeOff, TbSearch, TbX } from 'react-icons/tb'
 import dayjs from 'dayjs'
-import type { ChatType } from '../types'
 import type { ChangeEvent } from 'react'
+import type { ChatSummary } from '@/@types/types'
 
 const ChatList = () => {
     const chats = useChatStore((state) => state.chats)
@@ -19,11 +18,6 @@ const ChatList = () => {
     const selectedChat = useChatStore((state) => state.selectedChat)
     const setSelectedChat = useChatStore((state) => state.setSelectedChat)
     const setMobileSidebar = useChatStore((state) => state.setMobileSidebar)
-    const selectedChatType = useChatStore((state) => state.selectedChatType)
-    const setSelectedChatType = useChatStore(
-        (state) => state.setSelectedChatType,
-    )
-    const setChatRead = useChatStore((state) => state.setChatRead)
 
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -47,41 +41,12 @@ const ChatList = () => {
         }
     }, [showSearchBar])
 
-    const handleChatClick = ({
-        id,
-        user,
-        muted,
-        chatType,
-        unread,
-    }: {
-        id: string
-        user: { id: string; avatarImageUrl: string; name: string }
-        muted: boolean
-        chatType: ChatType
-        unread: number
-    }) => {
-        if (unread > 0) {
-            setChatRead(id)
-        }
-
-        setSelectedChat({
-            id,
-            user,
-            muted,
-            chatType,
-        })
+    const handleChatClick = (chat: ChatSummary) => {
+        setSelectedChat(chat)
         setMobileSidebar(false)
     }
 
     function handleDebounceFn(e: ChangeEvent<HTMLInputElement>) {
-        if (e.target.value.length > 0) {
-            setSelectedChatType('')
-        }
-
-        if (e.target.value.length === 0) {
-            setSelectedChatType('personal')
-        }
-
         setQueryText(e.target.value)
     }
 
@@ -117,58 +82,31 @@ const ChatList = () => {
                         {showSearchBar ? <TbX /> : <TbSearch />}
                     </button>
                 </div>
-                <ChatSegment />
             </div>
             <ScrollBar className="h-[calc(100%-150px)] overflow-y-auto">
                 <div className="flex flex-col gap-2 h-full">
-                    {chats
-                        .filter((item) => {
-                            if (queryText) {
-                                return item.name
-                                    .toLowerCase()
-                                    .includes(queryText)
-                            }
-
-                            return selectedChatType === item.chatType
-                        })
-                        .map((item) => (
+                    {chats.map((item) => {
+                        const selectedChatId = selectedChat && 'id' in selectedChat ? selectedChat.id : null;
+                        return (
                             <div
                                 key={item.id}
                                 className={classNames(
                                     'py-3 px-2 flex items-center gap-2 justify-between rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 relative cursor-pointer select-none',
-                                    selectedChat.id === item.id &&
+                                    selectedChatId === item.id &&
                                         'bg-gray-100 dark:bg-gray-700',
                                 )}
                                 role="button"
-                                onClick={() =>
-                                    handleChatClick({
-                                        id: item.id,
-                                        user: {
-                                            id: item.userId || item.groupId,
-                                            avatarImageUrl: item.avatar,
-                                            name: item.name,
-                                        },
-                                        muted: item.muted,
-                                        chatType: item.chatType,
-                                        unread: item.unread,
-                                    })
-                                }
+                                onClick={() => handleChatClick(item)}
                             >
                                 <div className="flex items-center gap-2 min-w-0 flex-1">
-                                    <div>
-                                        <Avatar src={item.avatar} />
-                                    </div>
                                     <div className="min-w-0 flex-1">
                                         <div className="flex justify-between">
                                             <div className="font-bold heading-text truncate flex gap-2 items-center">
-                                                <span>{item.name}</span>
-                                                {item.muted && (
-                                                    <TbVolumeOff className="opacity-60" />
-                                                )}
+                                                <span>{item.title}</span>
                                             </div>
                                         </div>
                                         <div className="truncate">
-                                            {item.lastConversation}
+                                            {item.id}
                                         </div>
                                     </div>
                                 </div>
@@ -178,12 +116,10 @@ const ChatList = () => {
                                             .unix(item.time)
                                             .format('hh:mm A')}
                                     </small>
-                                    {item.unread > 0 && (
-                                        <Badge className="bg-primary" />
-                                    )}
                                 </div>
                             </div>
-                        ))}
+                        );
+                    })}
                 </div>
             </ScrollBar>
             <NewChat />
