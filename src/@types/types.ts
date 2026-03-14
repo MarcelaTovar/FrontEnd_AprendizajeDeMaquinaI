@@ -43,7 +43,7 @@ export type ChatWithMessages = {
 }
 
 export type ChatMessageRequest = {
-    message: string
+    content: string
     chat_history?: string
 }
 

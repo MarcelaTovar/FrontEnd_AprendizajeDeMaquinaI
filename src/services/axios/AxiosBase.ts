@@ -5,7 +5,7 @@ import appConfig from '@/configs/app.config'
 import type { AxiosError } from 'axios'
 
 const AxiosBase = axios.create({
-    timeout: 60000,
+    timeout: 420000,
     baseURL: appConfig.apiPrefix,
 })
 

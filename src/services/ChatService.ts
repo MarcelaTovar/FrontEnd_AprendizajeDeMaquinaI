@@ -67,6 +67,7 @@ export async function readChatMessage(chatId: string | number) {
 }
 
 export async function sendChatMessage(chatId: string | number, data: ChatMessageRequest) {
+    console.log('Sending message to chatId:', chatId, 'with data:', data)
     return ApiService.fetchDataWithAxios<ChatRoundTripResponse, ChatMessageRequest>({
         url: endpointConfig.chatMessageSend(String(chatId)),
         method: 'post',

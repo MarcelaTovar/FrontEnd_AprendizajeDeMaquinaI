@@ -7,6 +7,7 @@ import classNames from '@/utils/classNames'
 import uniqueId from 'lodash/uniqueId'
 import useMessage from '../hooks/useMessages'
 import type { Message as BackendMessage } from '@/@types/types'
+import { sendChatMessage } from '@/services/ChatService'
 
 const ChatBody = () => {
     const scrollRef = useRef<any>(null)
@@ -15,22 +16,22 @@ const ChatBody = () => {
     const messagesRecord = useChatStore((state) => state.MessagesRecord)
     const { fetchMessage } = useMessage()
 
-        const adaptMessages = (messages: BackendMessage[]): ChatBoxMessageList =>
-            messages.map((msg) => ({
-                id: uniqueId('msg-'),
-                sender: {
-                    id: msg.senderId,
-                    name: msg.senderId === 'user' ? 'Tú' : 'Asistente IA',
-                    avatarImageUrl: msg.isAI ? '/bot.png' : undefined,
-                },
-                content: msg.content,
-                timestamp: new Date(msg.sendTime),
-                type: 'regular',
-                isMyMessage: msg.senderId === 'user',
-                showAvatar: msg.senderId !== 'user',
-                avatarGap: msg.senderId !== 'user',
-            }))
-        
+    const adaptMessages = (messages: BackendMessage[]): ChatBoxMessageList =>
+        messages.map((msg) => ({
+            id: uniqueId('msg-'),
+            sender: {
+                id: msg.senderId,
+                name: msg.senderId === 'user' ? 'Tú' : 'Asistente IA',
+                avatarImageUrl: msg.isAI ? '/bot.png' : undefined,
+            },
+            content: msg.content,
+            timestamp: new Date(msg.sendTime),
+            type: 'regular',
+            isMyMessage: msg.senderId === 'user',
+            showAvatar: msg.senderId !== 'user',
+            avatarGap: msg.senderId !== 'user',
+        }))
+
 
     useEffect(() => {
         const selectedChatId = selectedChat && 'id' in selectedChat ? selectedChat.id : null
@@ -39,6 +40,11 @@ const ChatBody = () => {
         }
         setLocalMessages([])
     }, [selectedChat && 'id' in selectedChat ? selectedChat.id : null])
+
+    // Elimina el mensaje de 'procesando' cuando llega la respuesta real
+    useEffect(() => {
+        setLocalMessages((prev) => prev.filter(msg => msg.id !== 'processing-bot'))
+    }, [messagesRecord])
 
     const handleInputChange = async ({ value }: { value: string }) => {
         if (!value.trim()) return
@@ -53,23 +59,46 @@ const ChatBody = () => {
             avatarGap: false,
         }
         setLocalMessages((prev) => [...prev, newMessage])
-        setTimeout(() => {
-            const botResponse: ChatBoxMessageList[number] = {
-                id: uniqueId('bot-msg-'),
-                sender: {
-                    id: 'bot',
-                    name: 'Asistente IA',
-                    avatarImageUrl: '/bot.png',
-                },
-                content: "¡Hola! Estoy procesando tu consulta con el sistema RAG. Dame un momento...",
-                timestamp: new Date(),
-                type: 'regular',
-                isMyMessage: false,
-                showAvatar: true,
-                avatarGap: true,
+        // Mensaje de bot 'procesando'
+        const botProcessing: ChatBoxMessageList[number] = {
+            id: 'processing-bot',
+            sender: {
+                id: 'bot',
+                name: 'Asistente IA',
+                avatarImageUrl: '/bot.png',
+            },
+            content: "¡Hola! Estoy procesando tu consulta con el sistema RAG. Dame un momento...",
+            timestamp: new Date(),
+            type: 'regular',
+            isMyMessage: false,
+            showAvatar: true,
+            avatarGap: true,
+        }
+        setLocalMessages((prev) => [...prev, botProcessing])
+        const selectedChatId = selectedChat && 'id' in selectedChat ? selectedChat.id : null
+        if (selectedChatId) {
+            try {
+                await sendChatMessage(selectedChatId, { content: value })
+                fetchMessage(selectedChatId)
+            } catch (error) {
+                setLocalMessages((prev) => prev.filter(msg => msg.id !== 'processing-bot'))
+                const errorMsg: ChatBoxMessageList[number] = {
+                    id: uniqueId('error-msg-'),
+                    sender: {
+                        id: 'bot',
+                        name: 'Asistente IA',
+                        avatarImageUrl: '/bot.png',
+                    },
+                    content: 'Hubo un error o timeout al procesar tu consulta. Intenta nuevamente.',
+                    timestamp: new Date(),
+                    type: 'regular',
+                    isMyMessage: false,
+                    showAvatar: true,
+                    avatarGap: true,
+                }
+                setLocalMessages((prev) => [...prev, errorMsg])
             }
-            setLocalMessages((prev) => [...prev, botResponse])
-        }, 800)
+        }
     }
 
     const cardHeaderProps = {
