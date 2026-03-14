@@ -8,15 +8,40 @@ import useChat from '../hooks/useChat'
 import classNames from '@/utils/classNames'
 import useDebounce from '@/utils/hooks/useDebounce'
 import { TbVolumeOff, TbSearch, TbX } from 'react-icons/tb'
+import { MdDelete } from 'react-icons/md'
 import dayjs from 'dayjs'
 import type { ChangeEvent } from 'react'
 import type { ChatSummary } from '@/@types/types'
+import { deleteChat } from '@/services/ChatService'
+
 
 const ChatList = () => {
+        const setChats = useChatStore((state) => state.setChats)
+        const setSelectedChat = useChatStore((state) => state.setSelectedChat)
+        const setMessagesRecord = useChatStore((state) => state.setMessagesRecord)
+        const setMessageFetched = useChatStore((state) => state.setMessageFetched)
+        const setChatsFetched = useChatStore((state) => state.setChatsFetched)
+        const [deletingId, setDeletingId] = useState<string | number | null>(null)
+        async function handleDeleteChat(chatId: string | number) {
+            setDeletingId(chatId)
+            console.log('Deleting chat with ID:', chatId) // Debugging log
+            try {
+                await deleteChat(chatId)
+                await fetchChats()
+                if (selectedChat && 'id' in selectedChat && selectedChat.id === chatId) {
+                    setSelectedChat({})
+                    setMessagesRecord([])
+                    setMessageFetched(false)
+                }
+                setChatsFetched(false)
+            } catch (e) {
+                // Manejo de error opcional
+            }
+            setDeletingId(null)
+        }
     const chats = useChatStore((state) => state.chats)
     const chatsFetched = useChatStore((state) => state.chatsFetched)
     const selectedChat = useChatStore((state) => state.selectedChat)
-    const setSelectedChat = useChatStore((state) => state.setSelectedChat)
     const setMobileSidebar = useChatStore((state) => state.setMobileSidebar)
 
     const inputRef = useRef<HTMLInputElement>(null)
@@ -91,14 +116,16 @@ const ChatList = () => {
                             <div
                                 key={item.id}
                                 className={classNames(
-                                    'py-3 px-2 flex items-center gap-2 justify-between rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 relative cursor-pointer select-none',
+                                    'py-3 px-2 flex items-center gap-2 justify-between rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 relative select-none',
                                     selectedChatId === item.id &&
                                         'bg-gray-100 dark:bg-gray-700',
                                 )}
-                                role="button"
-                                onClick={() => handleChatClick(item)}
                             >
-                                <div className="flex items-center gap-2 min-w-0 flex-1">
+                                <div
+                                    className="flex items-center gap-2 min-w-0 flex-1 cursor-pointer"
+                                    role="button"
+                                    onClick={() => handleChatClick(item)}
+                                >
                                     <div className="min-w-0 flex-1">
                                         <div className="flex justify-between">
                                             <div className="font-bold heading-text truncate flex gap-2 items-center">
@@ -116,6 +143,14 @@ const ChatList = () => {
                                             .unix(item.time)
                                             .format('hh:mm A')}
                                     </small>
+                                    <button
+                                        className="ml-2 text-red-500 hover:text-red-700"
+                                        title="Eliminar chat"
+                                        disabled={deletingId === item.id}
+                                        onClick={() => handleDeleteChat(item.id)}
+                                    >
+                                        <MdDelete size={20} />
+                                    </button>
                                 </div>
                             </div>
                         );

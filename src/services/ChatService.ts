@@ -32,7 +32,7 @@ export async function deleteChat(chatId: string | number) {
     return ApiService.fetchDataWithAxios<void>({
         url: endpointConfig.chatDelete,
         method: 'delete',
-        data: { chatId },
+        params: { chat_id: chatId },
     })
 }
 
