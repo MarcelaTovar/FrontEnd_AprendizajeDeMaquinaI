@@ -27,7 +27,7 @@ export type ChatState = {
 }
 
 type ChatAction = {
-    setChats: (payload: Chats) => void
+    setChats: (payload: import('@/@types/types').ChatSummary[]) => void
     setChatsFetched: (payload: boolean) => void
     setSelectedChat: (payload: SelectedChat) => void
     setContactInfoDrawer: (payload: ContactInfoDrawer) => void
@@ -57,9 +57,22 @@ const initialState: ChatState = {
     },
 }
 
-export const useChatStore = create<ChatState & ChatAction>((set, get) => ({
     ...initialState,
-    setChats: (payload) => set(() => ({ chats: payload })),
+    setChats: (payload) => {
+        const chats: Chats = payload.map((chat) => ({
+            id: String(chat.id),
+            name: chat.title,
+            userId: chat.ownerId,
+            avatar: '',
+            unread: 0,
+            time: Date.now(),
+            lastConversation: '',
+            muted: false,
+            chatType: 'personal',
+            groupId: '',
+        }))
+        set(() => ({ chats }))
+    },
     setChatsFetched: (payload) => set(() => ({ chatsFetched: payload })),
     setSelectedChat: (payload) => set(() => ({ selectedChat: payload })),
     setContactInfoDrawer: (payload) =>

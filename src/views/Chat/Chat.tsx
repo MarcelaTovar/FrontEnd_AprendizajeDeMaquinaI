@@ -9,10 +9,10 @@ const Chat = () => {
             <Card className="h-full border-0" bodyClass="h-full flex flex-col">
                 <div className="flex flex-auto h-full gap-8">
                     <ChatSidebar />
-                    <ChatBody />
+                    {/*<ChatBody />*/}
                 </div>
             </Card>
-            <ContactInfoDrawer />
+            {/*<ContactInfoDrawer />*/}
         </>
     )
 }

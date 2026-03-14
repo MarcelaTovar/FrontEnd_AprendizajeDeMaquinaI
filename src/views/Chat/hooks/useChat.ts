@@ -1,10 +1,11 @@
 import { useChatStore } from '../store/chatStore'
-import { apiGetChats } from '@/services/ChatService'
+import { getChatList } from '@/services/ChatService'
 import useSWRMutation from 'swr/mutation'
-import type { GetChatsResponse } from '../types'
+import { ChatListResponse } from '@/@types/types'
 
 async function getChats() {
-    const data = await apiGetChats<GetChatsResponse>()
+    const data = await getChatList()
+    console.log('Fetched chats:', data)
     return data
 }
 
@@ -17,7 +18,7 @@ const useChat = () => {
         getChats,
         {
             onSuccess: (list) => {
-                setChats(list)
+                setChats(list.chats)
                 setChatsFetched(true)
             },
         },
