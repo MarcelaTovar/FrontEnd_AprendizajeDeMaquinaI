@@ -55,7 +55,7 @@ const SignUpForm = (props: SignUpFormProps) => {
 
         if (!disableSubmit) {
             setSubmitting(true)
-            const result = await signUp({ userName, password, email })
+            const result = await signUp({ username: userName, password, email })
 
             if (result?.status === 'failed') {
                 setMessage?.(result.message)
