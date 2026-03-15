@@ -64,7 +64,7 @@ const SideNav = ({
         >
             <Link
                 to={appConfig.authenticatedEntryPath}
-                className="side-nav-header flex flex-col justify-center"
+                className="side-nav-header flex flex-col justify-center items-center"
                 style={{ height: HEADER_HEIGHT }}
             >
                 <Logo
