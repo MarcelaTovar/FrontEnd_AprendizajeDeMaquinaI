@@ -14,7 +14,6 @@ export type ChatSummary = {
     ownerId: string
     participantA: string
     participantB: string
-    time: number
 }
 
 export type ChatListResponse = {

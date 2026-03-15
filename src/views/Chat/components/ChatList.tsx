@@ -162,11 +162,6 @@ const ChatList = () => {
                                     </div>
                                 </div>
                                 <div className="flex gap-1 items-center">
-                                    <small className="font-semibold">
-                                        {dayjs
-                                            .unix(item.time)
-                                            .format('hh:mm A')}
-                                    </small>
                                     <button
                                         className="ml-2 text-red-500 hover:text-red-700"
                                         title="Eliminar chat"
