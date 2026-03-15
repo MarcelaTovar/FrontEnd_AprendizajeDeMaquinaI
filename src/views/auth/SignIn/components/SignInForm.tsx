@@ -42,10 +42,6 @@ const SignInForm = (props: SignInFormProps) => {
         formState: { errors },
         control,
     } = useForm<SignInFormSchema>({
-        defaultValues: {
-            email: 'admin-01@botmetics.com',
-            password: 'fernandoesgay',
-        },
         resolver: zodResolver(validationSchema),
     })
 

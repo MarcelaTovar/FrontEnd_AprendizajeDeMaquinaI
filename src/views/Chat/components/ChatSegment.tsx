@@ -1,3 +1,4 @@
+{/*
 import Segment from '@/components/ui/Segment'
 import { TbUserCircle, TbUsers } from 'react-icons/tb'
 import { useChatStore } from '../store/chatStore'
@@ -32,3 +33,5 @@ const ChatSegment = () => {
 }
 
 export default ChatSegment
+
+*/}

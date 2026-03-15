@@ -9,7 +9,7 @@ const ChatSidebar = () => {
         <div
             className={classNames(
                 'w-full md:w-[300px] md:block',
-                selectedChat.id && 'hidden',
+                selectedChat && 'id' in selectedChat && selectedChat.id ? 'hidden' : ''
             )}
         >
             <ChatList />

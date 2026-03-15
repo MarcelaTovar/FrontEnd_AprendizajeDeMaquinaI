@@ -1,88 +1,160 @@
 import { useState, useEffect, useRef } from 'react'
 import Avatar from '@/components/ui/Avatar'
 import Card from '@/components/ui/Card'
-import ChatBox from '@/components/view/ChatBox'
+import ChatBox, { type MessageList as ChatBoxMessageList } from '@/components/view/ChatBox'
 import { useChatStore } from '../store/chatStore'
 import classNames from '@/utils/classNames'
 import uniqueId from 'lodash/uniqueId'
+import useMessage from '../hooks/useMessages'
+import type { Message as BackendMessage } from '@/@types/types'
+import { sendChatMessage } from '@/services/ChatService'
 
 const ChatBody = () => {
     const scrollRef = useRef<any>(null)
     const selectedChat = useChatStore((state) => state.selectedChat)
-    const [conversation, setConversation] = useState<any[]>([])
+    const [localMessages, setLocalMessages] = useState<ChatBoxMessageList>([])
+    const messagesRecord = useChatStore((state) => state.MessagesRecord)
+    const { fetchMessage } = useMessage()
+
+    const adaptMessages = (messages: BackendMessage[]): ChatBoxMessageList =>
+        messages.map((msg) => ({
+            id: uniqueId('msg-'),
+            sender: {
+                id: msg.senderId,
+                name: msg.senderId === 'user' ? 'Tú' : 'Asistente IA',
+                avatarImageUrl: msg.isAI ? '/bot.png' : undefined,
+            },
+            content: msg.content,
+            timestamp: new Date(msg.sendTime),
+            type: 'regular',
+            isMyMessage: msg.senderId === 'user',
+            showAvatar: msg.senderId !== 'user',
+            avatarGap: msg.senderId !== 'user',
+        }))
+
 
     useEffect(() => {
-        if (selectedChat.id) {
-            setConversation([]) 
+        const selectedChatId = selectedChat && 'id' in selectedChat ? selectedChat.id : null
+        if (selectedChatId) {
+            fetchMessage(selectedChatId)
         }
-    }, [selectedChat.id]) 
+        setLocalMessages([])
+    }, [selectedChat && 'id' in selectedChat ? selectedChat.id : null])
+
+    useEffect(() => {
+        setLocalMessages([])
+    }, [messagesRecord])
 
     const handleInputChange = async ({ value }: { value: string }) => {
         if (!value.trim()) return
-
-        // 2. Crear mensaje del usuario
-        const newMessage = {
+        const newMessage: ChatBoxMessageList[number] = {
             id: uniqueId('user-msg-'),
             sender: { id: 'user', name: 'Tú' },
             content: value,
             timestamp: new Date(),
+            type: 'regular',
             isMyMessage: true,
+            showAvatar: false,
+            avatarGap: false,
         }
-
-
-        setConversation((prev) => [...prev, newMessage])
-
-
-        setTimeout(() => {
-            const botResponse = {
-                id: uniqueId('bot-msg-'),
-                sender: { 
-                    id: 'bot', 
-                    name: 'Asistente IA',
-                    avatarImageUrl: '/bot.png' 
-                },
-                content: "¡Hola! Estoy procesando tu consulta con el sistema RAG. Dame un momento...",
-                timestamp: new Date(),
-                isMyMessage: false,
+        setLocalMessages((prev) => [...prev, newMessage])
+        const botProcessing: ChatBoxMessageList[number] = {
+            id: 'processing-bot',
+            sender: {
+                id: 'bot',
+                name: 'Asistente IA',
+                avatarImageUrl: '/bot.png',
+            },
+            content: "¡Hola! Estoy procesando tu consulta con el sistema RAG. Dame un momento...",
+            timestamp: new Date(),
+            type: 'regular',
+            isMyMessage: false,
+            showAvatar: true,
+            avatarGap: true,
+        }
+        setLocalMessages((prev) => [...prev, botProcessing])
+        const selectedChatId = selectedChat && 'id' in selectedChat ? selectedChat.id : null
+        if (selectedChatId) {
+            try {
+                await sendChatMessage(selectedChatId, { content: value })
+                setTimeout(async () => { 
+                    await fetchMessage(selectedChatId)
+                    setLocalMessages((prev) => prev.filter(msg => msg.id !== 'processing-bot'))
+                }, 1000)
+            } catch (error) {
+                setLocalMessages((prev) => prev.filter(msg => msg.id !== 'processing-bot'))
+                const errorMsg: ChatBoxMessageList[number] = {
+                    id: uniqueId('error-msg-'),
+                    sender: {
+                        id: 'bot',
+                        name: 'Asistente IA',
+                        avatarImageUrl: '/bot.png',
+                    },
+                    content: 'Hubo un error o timeout al procesar tu consulta. Intenta nuevamente.',
+                    timestamp: new Date(),
+                    type: 'regular',
+                    isMyMessage: false,
+                    showAvatar: true,
+                    avatarGap: true,
+                }
+                setLocalMessages((prev) => [...prev, errorMsg])
             }
-            setConversation((prev) => [...prev, botResponse])
-        }, 800)
+        }
     }
 
     const cardHeaderProps = {
         header: {
             content: (
                 <div className="flex items-center gap-3">
-                    <Avatar src={selectedChat.user?.avatarImageUrl} shape="circle" />
+                    <Avatar src={'/bot.png'} shape="circle" />
                     <div>
                         <div className="font-bold heading-text text-sm md:text-base">
-                            {selectedChat.user?.name || 'Asistente IA'}
+                            {'title' in selectedChat ? selectedChat.title : 'Asistente IA'}
                         </div>
                         <div className="text-xs text-green-500 flex items-center gap-1">
                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                             En línea
                         </div>
                     </div>
+
                 </div>
             ),
             className: 'bg-gray-50 dark:bg-gray-600 h-[80px] border-b border-gray-200 dark:border-gray-700',
         },
     }
 
+    const combinedMessages = [
+        ...(messagesRecord ? adaptMessages(messagesRecord) : []),
+        ...localMessages,
+    ]
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            if (scrollRef.current.scrollToBottom) {
+                scrollRef.current.scrollToBottom()
+            } else if (scrollRef.current.scrollHeight) {
+                scrollRef.current.scrollTo({
+                    top: scrollRef.current.scrollHeight,
+                    behavior: 'smooth',
+                })
+            }
+        }
+    }, [combinedMessages])
+
     return (
-        <div className={classNames('w-full h-full', !selectedChat.id && 'hidden')}>
-            {selectedChat.id ? (
+        <div className={classNames('w-full h-full', !(selectedChat && 'id' in selectedChat) && 'hidden')}>
+            {(selectedChat && 'id' in selectedChat) ? (
                 <Card
                     className="flex flex-col h-full border-none shadow-none"
                     bodyClass="p-0 flex-1 relative overflow-hidden"
                     {...cardHeaderProps}
                 >
-                    <div className="h-[calc(100vh-250px)] md:h-[600px] flex flex-col"> 
+                    <div className="h-[calc(100vh-250px)] md:h-[600px] flex flex-col">
                         <ChatBox
-                            containerClass="flex flex-col flex-1 h-full"  
-                            messageListClass="flex-1 relative"            
+                            containerClass="flex flex-col flex-1 h-full"
+                            messageListClass="flex-1 relative"
                             ref={scrollRef}
-                            messageList={conversation}
+                            messageList={combinedMessages}
                             placeholder="Escribe tu consulta aquí..."
                             onInputChange={handleInputChange}
                         />

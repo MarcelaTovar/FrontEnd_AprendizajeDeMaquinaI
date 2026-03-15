@@ -37,11 +37,13 @@ export const SignInBase = ({
                     <span className="break-all">{message}</span>
                 </Alert>
             )}
+
             <SignInForm
                 disableSubmit={disableSubmit}
                 setMessage={setMessage}
                 passwordHint={
                     <div className="mb-7 mt-2">
+                        {/*
                         <ActionLink
                             to={forgetPasswordUrl}
                             className="font-semibold heading-text mt-2 underline"
@@ -49,6 +51,7 @@ export const SignInBase = ({
                         >
                             Olvidaste tu contraseña?
                         </ActionLink>
+                        */}
                     </div>
                 }
             />
