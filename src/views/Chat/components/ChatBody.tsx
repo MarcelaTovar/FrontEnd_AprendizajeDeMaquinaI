@@ -90,7 +90,7 @@ const ChatBody = () => {
                         name: 'Asistente IA',
                         avatarImageUrl: '/bot.png',
                     },
-                    content: 'Hubo un error o timeout al procesar tu consulta. Intenta nuevamente.',
+                    content: 'La consulta está tardando más de lo esperado. Por favor, actualice la página una vez que el proceso haya finalizado.\nSi el cuadro aparece vacío, no envíe otro mensaje: su solicitud anterior aún se está procesando.',
                     timestamp: new Date(),
                     type: 'regular',
                     isMyMessage: false,
