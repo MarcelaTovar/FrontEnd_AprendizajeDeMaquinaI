@@ -67,7 +67,7 @@ const Message = (props: MessageProps) => {
                             )}
                             <div
                                 className={classNames(
-                                    'bubble flex flex-col justify-center h-full max-w-[750px] rounded-xl px-5 py-2.5 bg-gray-100 dark:bg-gray-700 prose text-sm text-gray-900 dark:text-gray-100',
+                                    'bubble flex flex-col justify-center h-full max-w-[750px] rounded-xl px-5 py-2.5 bg-gray-100 dark:bg-gray-700 prose text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap',
                                     bubbleClass,
                                 )}
                             >
