@@ -7,7 +7,7 @@ import {
 import type { NavigationTree } from '@/@types/navigation'
 
 const navigationConfig: NavigationTree[] = [
-       {
+    {
         key: 'Chat',
         path: '/Chat',
         title: 'Chat',
@@ -16,10 +16,20 @@ const navigationConfig: NavigationTree[] = [
         type: NAV_ITEM_TYPE_ITEM,
         authority: [],
         subMenu: [],
-    },    {
+    }, {
         key: 'Settings',
         path: '/settings',
         title: 'Settings',
+        translateKey: 'nav.settings',
+        icon: 'settings',
+        type: NAV_ITEM_TYPE_ITEM,
+        authority: [],
+        subMenu: [],
+    },
+    {
+        key: 'files',
+        path: '/files',
+        title: 'files',
         translateKey: 'nav.settings',
         icon: 'settings',
         type: NAV_ITEM_TYPE_ITEM,

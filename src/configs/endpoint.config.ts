@@ -19,6 +19,8 @@ const endpointConfig = {
     // Messages
     chatMessageRead: (chatId: string) => `/chat/message/${chatId}/`, // GET
     chatMessageSend: (chatId: string) => `/chat/message/${chatId}/`, // POST
+
+    getfiles: '/files/' //files
 };
 
 export default endpointConfig
