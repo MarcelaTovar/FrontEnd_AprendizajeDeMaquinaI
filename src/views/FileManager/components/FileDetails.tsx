@@ -58,7 +58,7 @@ const FileDetails = ({ onShare }: FileDetailsProps) => {
                     </div>
                     <div className="mt-10 flex justify-center">
                         {file.fileType.startsWith('jpeg') ||
-                        file.fileType.startsWith('png') ? (
+                            file.fileType.startsWith('png') ? (
                             <img
                                 src={file.srcUrl}
                                 className="max-h-[170px] rounded-xl"
@@ -96,6 +96,7 @@ const FileDetails = ({ onShare }: FileDetailsProps) => {
                             />
                         </div>
                     </div>
+                    {/*
                     <div className="mt-10">
                         <div className="flex justify-between items-center">
                             <h6>Compartido con</h6>
@@ -124,6 +125,7 @@ const FileDetails = ({ onShare }: FileDetailsProps) => {
                             ))}
                         </div>
                     </div>
+            */}
                 </div>
             )}
         </Drawer>
