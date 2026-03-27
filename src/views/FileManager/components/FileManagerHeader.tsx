@@ -4,15 +4,20 @@ import UploadFile from './UploadFile'
 import { useFileManagerStore } from '../store/useFileManagerStore'
 import { TbChevronRight, TbLayoutGrid, TbList } from 'react-icons/tb'
 import type { Layout } from '../types'
+import Button from '@/components/ui/Button'
 
 type FileManagerHeaderProps = {
     onEntryClick: () => void
     onDirectoryClick: (id: string) => void
+    onDataUpdated: () => void
+    onRebuildEmbeddings: () => Promise<void>
 }
 
 const FileManagerHeader = ({
     onEntryClick,
     onDirectoryClick,
+    onDataUpdated,
+    onRebuildEmbeddings,
 }: FileManagerHeaderProps) => {
     const { directories, layout, setLayout } = useFileManagerStore()
 
@@ -73,7 +78,10 @@ const FileManagerHeader = ({
                         <TbList />
                     </Segment.Item>
                 </Segment>
-                <UploadFile />
+                <Button variant="default" onClick={onRebuildEmbeddings}>
+                    Rebuild embeddings
+                </Button>
+                <UploadFile onDataUpdated={onDataUpdated} />
             </div>
         </div>
     )

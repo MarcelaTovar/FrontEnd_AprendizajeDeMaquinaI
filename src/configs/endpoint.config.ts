@@ -22,9 +22,9 @@ const endpointConfig = {
 
     agentsBranchesList: '/agents/branches/', // GET
     agentsBranchesCreate: '/agents/branches/create/', // POST
-    agentsBranchesDelete: (branch: string) => `/agents/branches/${branch}/`, // DELETE
-    agentsBranchesFilesList: (branch: string) => `/agents/branches/${branch}/files/`, // GET
-    agentsBranchesFilesDelete: (branch: string, filename: string) => `/agents/branches/${branch}/files/${filename}/`, // DELETE
+    agentsBranchesDelete: (branch: string) => `/agents/branches/${encodeURIComponent(branch)}/`, // DELETE
+    agentsBranchesFilesList: (branch: string) => `/agents/branches/${encodeURIComponent(branch)}/files/`, // GET
+    agentsBranchesFilesDelete: (branch: string, filename: string) => `/agents/branches/${encodeURIComponent(branch)}/files/${encodeURIComponent(filename)}/`, // DELETE
     agentsRebuildEmbeddings: '/agents/rebuild-embeddings/', // POST
     agentsUploadPdfs: '/agents/upload-pdfs/', // POST
 };

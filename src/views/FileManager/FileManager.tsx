@@ -9,9 +9,15 @@ import FileManagerDeleteDialog from './components/FileManagerDeleteDialog'
 import FileManagerInviteDialog from './components/FileManagerInviteDialog'
 import FileManagerRenameDialog from './components/FileManagerRenameDialog'
 import { useFileManagerStore } from './store/useFileManagerStore'
-import { apiGetAgentBranchFiles, apiGetAgentsBranches } from '@/services/AgentsService'
+import {
+    apiGetAgentBranchFiles,
+    apiGetAgentsBranches,
+    apiRebuildEmbeddings,
+} from '@/services/AgentsService'
 import useSWRMutation from 'swr/mutation'
 import { GetFileListResponse } from './types'
+import toast from '@/components/ui/toast'
+import Notification from '@/components/ui/Notification'
 
 const { THead, Th, Tr } = Table
 
@@ -115,6 +121,10 @@ const FileManager = () => {
         },
     )
 
+    const refreshCurrentView = () => {
+        trigger(openedDirectoryId)
+    }
+
     useEffect(() => {
         if (fileList.length === 0) {
             trigger(openedDirectoryId)
@@ -172,12 +182,35 @@ const FileManager = () => {
         setSelectedFile(fileId)
     }
 
+    const handleRebuildEmbeddings = async () => {
+        try {
+            await apiRebuildEmbeddings(
+                openedDirectoryId ? { branch: openedDirectoryId } : {},
+            )
+            toast.push(
+                <Notification title="Embeddings rebuilt" type="success" />,
+                { placement: 'top-center' },
+            )
+        } catch (error) {
+            console.error('Error al reconstruir embeddings:', error)
+            toast.push(
+                <Notification
+                    title="Failed to rebuild embeddings"
+                    type="danger"
+                />,
+                { placement: 'top-center' },
+            )
+        }
+    }
+
     return (
         <>
             <div>
                 <FileManagerHeader
                     onEntryClick={handleEntryClick}
                     onDirectoryClick={handleDirectoryClick}
+                    onDataUpdated={refreshCurrentView}
+                    onRebuildEmbeddings={handleRebuildEmbeddings}
                 />
                 <div className="mt-6">
                     {isMutating ? (
@@ -226,7 +259,7 @@ const FileManager = () => {
                 </div>
             </div>
             <FileDetails onShare={handleShare} />
-            <FileManagerDeleteDialog />
+            <FileManagerDeleteDialog onSuccess={refreshCurrentView} />
             <FileManagerInviteDialog />
             <FileManagerRenameDialog />
         </>

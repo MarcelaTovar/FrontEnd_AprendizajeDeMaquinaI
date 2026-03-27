@@ -10,8 +10,8 @@ export async function apiGetAgentsBranches<T>() {
 }
 
 // POST /agents/branches/create/
-export async function apiCreateAgentBranch<T, U extends Record<string, unknown>>(data: U) {
-    return ApiService.fetchDataWithAxios<T>({
+export async function apiCreateAgentBranch<T, U extends Record<string, unknown> | FormData>(data: U) {
+    return ApiService.fetchDataWithAxios<T, Record<string, unknown> | FormData>({
         url: endpointConfig.agentsBranchesCreate,
         method: 'post',
         data,
@@ -43,8 +43,8 @@ export async function apiDeleteAgentBranchFile<T>(branch: string, filename: stri
 }
 
 // POST /agents/rebuild-embeddings/
-export async function apiRebuildEmbeddings<T, U extends Record<string, unknown>>(data: U) {
-    return ApiService.fetchDataWithAxios<T>({
+export async function apiRebuildEmbeddings<T, U extends Record<string, unknown> | FormData>(data: U) {
+    return ApiService.fetchDataWithAxios<T, Record<string, unknown> | FormData>({
         url: endpointConfig.agentsRebuildEmbeddings,
         method: 'post',
         data,
@@ -52,8 +52,8 @@ export async function apiRebuildEmbeddings<T, U extends Record<string, unknown>>
 }
 
 // POST /agents/upload-pdfs/
-export async function apiUploadPdfs<T, U extends Record<string, unknown>>(data: U) {
-    return ApiService.fetchDataWithAxios<T>({
+export async function apiUploadPdfs<T, U extends Record<string, unknown> | FormData>(data: U) {
+    return ApiService.fetchDataWithAxios<T, Record<string, unknown> | FormData>({
         url: endpointConfig.agentsUploadPdfs,
         method: 'post',
         data,
