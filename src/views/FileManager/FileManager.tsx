@@ -9,17 +9,85 @@ import FileManagerDeleteDialog from './components/FileManagerDeleteDialog'
 import FileManagerInviteDialog from './components/FileManagerInviteDialog'
 import FileManagerRenameDialog from './components/FileManagerRenameDialog'
 import { useFileManagerStore } from './store/useFileManagerStore'
-import { apiGetFiles } from '@/services/FileService'
+import { apiGetAgentBranchFiles, apiGetAgentsBranches } from '@/services/AgentsService'
 import useSWRMutation from 'swr/mutation'
 import { GetFileListResponse } from './types'
 
 const { THead, Th, Tr } = Table
 
-async function getFile(_: string, { arg }: { arg: string }) {
-    const data = await apiGetFiles<GetFileListResponse, { id: string }>({
-        id: arg,
-    })
-    return data
+type BranchesApiResponse = {
+    branches: string[]
+}
+
+type BranchFilesApiResponse = {
+    branch: string
+    files: string[]
+}
+
+const createBaseFile = (id: string, name: string, fileType: string) => {
+    const now = Math.floor(Date.now() / 1000)
+
+    return {
+        id,
+        name,
+        fileType,
+        srcUrl: '',
+        size: 0,
+        author: {
+            name: '',
+            email: '',
+            img: '',
+        },
+        activities: [
+            {
+                userName: '',
+                userImg: '',
+                actionType: 'created',
+                timestamp: now,
+            },
+        ],
+        permissions: [],
+        uploadDate: now,
+        recent: false,
+    }
+}
+
+const getFileExtension = (fileName: string) => {
+    const splitName = fileName.split('.')
+    return splitName.length > 1
+        ? splitName[splitName.length - 1].toLowerCase()
+        : 'doc'
+}
+
+async function getBranches(_: string, { arg }: { arg: string }) {
+    try {
+        if (arg) {
+            const data =
+                await apiGetAgentBranchFiles<BranchFilesApiResponse>(arg)
+
+            return {
+                directory: [{ id: data.branch, label: data.branch }],
+                list: data.files.map((fileName) =>
+                    createBaseFile(fileName, fileName, getFileExtension(fileName)),
+                ),
+            } as GetFileListResponse
+        }
+
+        const data = await apiGetAgentsBranches<BranchesApiResponse>()
+
+        return {
+            directory: [],
+            list: data.branches.map((branchName) =>
+                createBaseFile(branchName, branchName, 'directory'),
+            ),
+        } as GetFileListResponse
+    } catch (error) {
+        console.error('Error al obtener archivos de la branch:', error)
+        return {
+            directory: [],
+            list: [],
+        } as GetFileListResponse
+    }
 }
 
 const FileManager = () => {
@@ -38,7 +106,7 @@ const FileManager = () => {
 
     const { trigger, isMutating } = useSWRMutation(
         `/api/files/${openedDirectoryId}`,
-        getFile,
+        getBranches,
         {
             onSuccess: (resp) => {
                 setDirectories(resp.directory)
@@ -65,7 +133,7 @@ const FileManager = () => {
     const handleDownload = () => {
         const blob = new Blob(
             [
-                'This text file is created to demonstrate how file downloading works in our template demo.',
+                'Feature not worked',
             ],
             { type: 'text/plain;charset=utf-8' },
         )

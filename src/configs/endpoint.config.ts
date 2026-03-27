@@ -20,7 +20,13 @@ const endpointConfig = {
     chatMessageRead: (chatId: string) => `/chat/message/${chatId}/`, // GET
     chatMessageSend: (chatId: string) => `/chat/message/${chatId}/`, // POST
 
-    getfiles: '/files/' //files
+    agentsBranchesList: '/agents/branches/', // GET
+    agentsBranchesCreate: '/agents/branches/create/', // POST
+    agentsBranchesDelete: (branch: string) => `/agents/branches/${branch}/`, // DELETE
+    agentsBranchesFilesList: (branch: string) => `/agents/branches/${branch}/files/`, // GET
+    agentsBranchesFilesDelete: (branch: string, filename: string) => `/agents/branches/${branch}/files/${filename}/`, // DELETE
+    agentsRebuildEmbeddings: '/agents/rebuild-embeddings/', // POST
+    agentsUploadPdfs: '/agents/upload-pdfs/', // POST
 };
 
 export default endpointConfig
