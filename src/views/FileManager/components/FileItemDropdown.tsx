@@ -61,6 +61,7 @@ const FileItemDropdown = (props: FileItemDropdownProps) => {
                 <TbPencil className="text-xl" />
                 <span>Renombrar</span>
             </Dropdown.Item>
+            {/*
             <Dropdown.Item
                 eventKey="share"
                 onClick={(e) => handleDropdownItemClick(e, onShare)}
@@ -68,6 +69,7 @@ const FileItemDropdown = (props: FileItemDropdownProps) => {
                 <TbUserPlus className="text-xl" />
                 <span>Compartir</span>
             </Dropdown.Item>
+            */}
             <Dropdown.Item
                 eventKey="share"
                 onClick={(e) => handleDropdownItemClick(e, onDelete)}
