@@ -72,24 +72,24 @@ const FileDetails = ({ onShare }: FileDetailsProps) => {
                         <h4>{file.name}</h4>
                     </div>
                     <div className="mt-8">
-                        <h6>Info</h6>
+                        <h6>Informacion</h6>
                         <div className="mt-4 flex flex-col gap-4">
                             <InfoRow
-                                label="Size"
+                                label="Tamano"
                                 value={fileSizeUnit(file.size)}
                             />
                             <InfoRow
-                                label="Type"
+                                label="Tipo"
                                 value={<FileType type={file.fileType} />}
                             />
                             <InfoRow
-                                label="Created"
+                                label="Creado"
                                 value={dayjs
                                     .unix(file.uploadDate)
                                     .format('MMM DD, YYYY')}
                             />
                             <InfoRow
-                                label="Last modified"
+                                label="Ultima modificacion"
                                 value={dayjs
                                     .unix(file.activities[0].timestamp)
                                     .format('MMM DD, YYYY')}
@@ -98,7 +98,7 @@ const FileDetails = ({ onShare }: FileDetailsProps) => {
                     </div>
                     <div className="mt-10">
                         <div className="flex justify-between items-center">
-                            <h6>Shared with</h6>
+                            <h6>Compartido con</h6>
                             <Button
                                 type="button"
                                 shape="circle"

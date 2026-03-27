@@ -25,17 +25,17 @@ const FileManagerRenameDialog = () => {
             onClose={handleDialogClose}
             onRequestClose={handleDialogClose}
         >
-            <h4>Rename</h4>
+            <h4>Renombrar</h4>
             <div className="mt-6">
                 <DebouceInput
-                    placeholder="New name"
+                    placeholder="Nuevo nombre"
                     type="text"
                     onChange={(e) => setNewName(e.target.value)}
                 />
             </div>
             <div className="mt-6 flex justify-end items-center gap-2">
                 <Button size="sm" onClick={handleDialogClose}>
-                    Close
+                    Cerrar
                 </Button>
                 <Button
                     variant="solid"
@@ -43,7 +43,7 @@ const FileManagerRenameDialog = () => {
                     disabled={newName.length === 0}
                     onClick={handleSubmit}
                 >
-                    <span className="flex justify-center min-w-10">Ok</span>
+                    <span className="flex justify-center min-w-10">Aceptar</span>
                 </Button>
             </div>
         </Dialog>

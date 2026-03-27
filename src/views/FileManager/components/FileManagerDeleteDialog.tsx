@@ -43,13 +43,13 @@ const FileManagerDeleteDialog = ({ onSuccess }: FileManagerDeleteDialogProps) =>
             setDeleteDialog({ id: '', open: false })
             onSuccess?.()
             toast.push(
-                <Notification title="Deleted successfully" type="success" />,
+                <Notification title="Eliminado correctamente" type="success" />,
                 { placement: 'top-center' },
             )
         } catch (error) {
             console.error('Error al eliminar elemento:', error)
             toast.push(
-                <Notification title="Delete failed" type="danger" />,
+                <Notification title="No se pudo eliminar" type="danger" />,
                 { placement: 'top-center' },
             )
         }
@@ -59,15 +59,15 @@ const FileManagerDeleteDialog = ({ onSuccess }: FileManagerDeleteDialogProps) =>
         <ConfirmDialog
             isOpen={deleteDialog.open}
             type="danger"
-            title="Delete file"
+            title="Eliminar archivo"
             onClose={handleDeleteDialogClose}
             onRequestClose={handleDeleteDialogClose}
             onCancel={handleDeleteDialogClose}
             onConfirm={handleDeleteConfirm}
         >
             <p>
-                Are you sure you want to delete file? This action can&apos;t be
-                undo.{' '}
+                Estas seguro de que queres eliminar este archivo? Esta accion no
+                se puede deshacer.
             </p>
         </ConfirmDialog>
     )

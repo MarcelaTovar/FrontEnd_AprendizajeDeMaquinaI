@@ -60,9 +60,9 @@ const FileList = (props: FileListProps) => {
         <Table className="mt-4">
             <THead>
                 <Tr>
-                    <Th>File</Th>
-                    <Th>Size</Th>
-                    <Th>Type</Th>
+                    <Th>Archivo</Th>
+                    <Th>Tamano</Th>
+                    <Th>Tipo</Th>
                     <Th></Th>
                 </Tr>
             </THead>
@@ -89,14 +89,14 @@ const FileList = (props: FileListProps) => {
         <div>
             {folders.length > 0 && (
                 <div>
-                    <h4>Folders</h4>
+                    <h4>Carpetas</h4>
                     {layout === 'grid' && renderFileSegment(folders, true)}
                     {layout === 'list' && renderFileRow(folders, true)}
                 </div>
             )}
             {files.length > 0 && (
                 <div className="mt-8">
-                    <h4>Files</h4>
+                    <h4>Archivos</h4>
                     {layout === 'grid' && renderFileSegment(files)}
                     {layout === 'list' && renderFileRow(files)}
                 </div>

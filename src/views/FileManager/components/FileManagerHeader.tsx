@@ -1,10 +1,11 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import Segment from '@/components/ui/Segment'
 import UploadFile from './UploadFile'
 import { useFileManagerStore } from '../store/useFileManagerStore'
 import { TbChevronRight, TbLayoutGrid, TbList } from 'react-icons/tb'
 import type { Layout } from '../types'
 import Button from '@/components/ui/Button'
+import Dialog from '@/components/ui/Dialog'
 
 type FileManagerHeaderProps = {
     onEntryClick: () => void
@@ -20,6 +21,8 @@ const FileManagerHeader = ({
     onRebuildEmbeddings,
 }: FileManagerHeaderProps) => {
     const { directories, layout, setLayout } = useFileManagerStore()
+    const [rebuildDialogOpen, setRebuildDialogOpen] = useState(false)
+    const [isRebuilding, setIsRebuilding] = useState(false)
 
     const handleEntryClick = () => {
         onEntryClick()
@@ -27,6 +30,22 @@ const FileManagerHeader = ({
 
     const handleDirectoryClick = (id: string) => {
         onDirectoryClick(id)
+    }
+
+    const handleRebuildDialogClose = () => {
+        if (!isRebuilding) {
+            setRebuildDialogOpen(false)
+        }
+    }
+
+    const handleRebuildConfirm = async () => {
+        setIsRebuilding(true)
+        try {
+            await onRebuildEmbeddings()
+            setRebuildDialogOpen(false)
+        } finally {
+            setIsRebuilding(false)
+        }
     }
 
     return (
@@ -40,7 +59,7 @@ const FileManagerHeader = ({
                                 role="button"
                                 onClick={handleEntryClick}
                             >
-                                File Manager
+                                Gestor de archivos
                             </span>
                             {directories.map((dir, index) => (
                                 <Fragment key={dir.id}>
@@ -63,7 +82,7 @@ const FileManagerHeader = ({
                         </h3>
                     </div>
                 ) : (
-                    <h3>File Manager</h3>
+                    <h3>Gestor de archivos</h3>
                 )}
             </div>
             <div className="flex items-center gap-2">
@@ -78,11 +97,42 @@ const FileManagerHeader = ({
                         <TbList />
                     </Segment.Item>
                 </Segment>
-                <Button variant="default" onClick={onRebuildEmbeddings}>
-                    Rebuild embeddings
+                <Button
+                    variant="default"
+                    onClick={() => setRebuildDialogOpen(true)}
+                >
+                    Reconstruir embeddings
                 </Button>
                 <UploadFile onDataUpdated={onDataUpdated} />
             </div>
+            <Dialog
+                isOpen={rebuildDialogOpen}
+                onClose={handleRebuildDialogClose}
+                onRequestClose={handleRebuildDialogClose}
+            >
+                <h4>Confirmar reconstruccion de embeddings</h4>
+                <p className="mt-4">
+                    Esta accion puede tardar varios minutos segun la cantidad
+                    de documentos. Queres continuar?
+                </p>
+                <div className="mt-6 flex justify-end gap-2">
+                    <Button
+                        size="sm"
+                        disabled={isRebuilding}
+                        onClick={handleRebuildDialogClose}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        variant="solid"
+                        size="sm"
+                        loading={isRebuilding}
+                        onClick={handleRebuildConfirm}
+                    >
+                        Confirmar
+                    </Button>
+                </div>
+            </Dialog>
         </div>
     )
 }

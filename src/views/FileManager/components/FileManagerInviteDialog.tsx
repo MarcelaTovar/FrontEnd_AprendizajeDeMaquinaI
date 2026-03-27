@@ -26,7 +26,7 @@ const FileManagerInviteDialog = () => {
         toast.push(
             <Notification
                 type="success"
-                title="Invitation send!"
+                title="Invitacion enviada"
             ></Notification>,
             { placement: 'top-end' },
         )
@@ -35,7 +35,7 @@ const FileManagerInviteDialog = () => {
 
     const handleCopy = async () => {
         toast.push(
-            <Notification type="success" title="Copied!"></Notification>,
+            <Notification type="success" title="Copiado"></Notification>,
             { placement: 'top-end' },
         )
         navigator.clipboard.writeText(window.location.href)
@@ -48,7 +48,7 @@ const FileManagerInviteDialog = () => {
             onClose={handleDialogClose}
             onRequestClose={handleDialogClose}
         >
-            <h4>Share this file</h4>
+            <h4>Compartir archivo</h4>
             <div className="mt-6">
                 <Input
                     ref={inputRef}
@@ -70,7 +70,7 @@ const FileManagerInviteDialog = () => {
                             loading={inviting}
                             onClick={handleInvite}
                         >
-                            Invite
+                            Invitar
                         </Button>
                     }
                 />
@@ -82,10 +82,10 @@ const FileManagerInviteDialog = () => {
                     icon={<TbLink />}
                     onClick={handleCopy}
                 >
-                    Copy link
+                    Copiar enlace
                 </Button>
                 <Button variant="solid" size="sm" onClick={handleDialogClose}>
-                    Done
+                    Listo
                 </Button>
             </div>
         </Dialog>

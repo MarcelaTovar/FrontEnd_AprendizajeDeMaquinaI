@@ -143,7 +143,7 @@ const FileManager = () => {
     const handleDownload = () => {
         const blob = new Blob(
             [
-                'Feature not worked',
+                'Esta funcion todavia no esta disponible.',
             ],
             { type: 'text/plain;charset=utf-8' },
         )
@@ -188,14 +188,14 @@ const FileManager = () => {
                 openedDirectoryId ? { branch: openedDirectoryId } : {},
             )
             toast.push(
-                <Notification title="Embeddings rebuilt" type="success" />,
+                <Notification title="Embeddings reconstruidos" type="success" />,
                 { placement: 'top-center' },
             )
         } catch (error) {
             console.error('Error al reconstruir embeddings:', error)
             toast.push(
                 <Notification
-                    title="Failed to rebuild embeddings"
+                    title="No se pudieron reconstruir los embeddings"
                     type="danger"
                 />,
                 { placement: 'top-center' },
@@ -227,9 +227,9 @@ const FileManager = () => {
                             <Table>
                                 <THead>
                                     <Tr>
-                                        <Th>File</Th>
-                                        <Th>Size</Th>
-                                        <Th>Type</Th>
+                                        <Th>Archivo</Th>
+                                        <Th>Tamano</Th>
+                                        <Th>Tipo</Th>
                                         <Th></Th>
                                     </Tr>
                                 </THead>

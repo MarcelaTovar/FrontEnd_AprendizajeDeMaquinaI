@@ -64,13 +64,13 @@ const UploadFile = ({ onDataUpdated }: UploadFileProps) => {
             handleUploadDialogClose()
             onDataUpdated()
             toast.push(
-                <Notification title={'Successfully uploaded'} type="success" />,
+                <Notification title={'Archivos subidos correctamente'} type="success" />,
                 { placement: 'top-center' },
             )
         } catch (error) {
             console.error('Error al subir archivos:', error)
             toast.push(
-                <Notification title={'Upload failed'} type="danger" />,
+                <Notification title={'No se pudieron subir los archivos'} type="danger" />,
                 { placement: 'top-center' },
             )
         } finally {
@@ -91,13 +91,13 @@ const UploadFile = ({ onDataUpdated }: UploadFileProps) => {
             handleBranchDialogClose()
             onDataUpdated()
             toast.push(
-                <Notification title={'Branch created'} type="success" />,
+                <Notification title={'Rama creada'} type="success" />,
                 { placement: 'top-center' },
             )
         } catch (error) {
             console.error('Error al crear branch:', error)
             toast.push(
-                <Notification title={'Branch creation failed'} type="danger" />,
+                <Notification title={'No se pudo crear la rama'} type="danger" />,
                 { placement: 'top-center' },
             )
         } finally {
@@ -108,21 +108,21 @@ const UploadFile = ({ onDataUpdated }: UploadFileProps) => {
     return (
         <>
             <Button variant="default" onClick={() => setBranchDialogOpen(true)}>
-                New branch
+                Nueva rama
             </Button>
             <Button variant="solid" onClick={() => setUploadDialogOpen(true)}>
-                Upload
+                Subir
             </Button>
             <Dialog
                 isOpen={branchDialogOpen}
                 onClose={handleBranchDialogClose}
                 onRequestClose={handleBranchDialogClose}
             >
-                <h4>Create Branch</h4>
+                <h4>Crear rama</h4>
                 <div className="mt-6">
                     <Input
                         value={newBranchName}
-                        placeholder="Branch name"
+                        placeholder="Nombre de la rama"
                         onChange={(e) => setNewBranchName(e.target.value)}
                     />
                 </div>
@@ -134,7 +134,7 @@ const UploadFile = ({ onDataUpdated }: UploadFileProps) => {
                         disabled={newBranchName.trim().length === 0}
                         onClick={handleCreateBranch}
                     >
-                        Create
+                        Crear
                     </Button>
                 </div>
             </Dialog>
@@ -143,12 +143,12 @@ const UploadFile = ({ onDataUpdated }: UploadFileProps) => {
                 onClose={handleUploadDialogClose}
                 onRequestClose={handleUploadDialogClose}
             >
-                <h4>Upload Files</h4>
+                <h4>Subir archivos</h4>
                 {!openedDirectoryId && (
                     <div className="mt-4">
                         <Input
                             value={targetBranch}
-                            placeholder="Target branch"
+                            placeholder="Rama de destino"
                             onChange={(e) => setTargetBranch(e.target.value)}
                         />
                     </div>
@@ -167,12 +167,12 @@ const UploadFile = ({ onDataUpdated }: UploadFileProps) => {
                         </div>
                         <p className="font-semibold">
                             <span className="text-gray-800 dark:text-white">
-                                Drop your files here, or{' '}
+                                Arrastra tus archivos aqui o{' '}
                             </span>
-                            <span className="text-blue-500">browse</span>
+                            <span className="text-blue-500">busca</span>
                         </p>
                         <p className="mt-1 font-semibold opacity-60 dark:text-white">
-                            through your machine
+                            en tu dispositivo
                         </p>
                     </div>
                 </Upload>
@@ -184,7 +184,7 @@ const UploadFile = ({ onDataUpdated }: UploadFileProps) => {
                         disabled={uploadedFiles.length === 0}
                         onClick={handleUpload}
                     >
-                        Upload
+                        Subir
                     </Button>
                 </div>
             </Dialog>

@@ -44,7 +44,7 @@ const FileItemDropdown = (props: FileItemDropdownProps) => {
                     onClick={(e) => handleDropdownItemClick(e, onOpen)}
                 >
                     <TbFolderSymlink className="text-xl" />
-                    <span>Open</span>
+                    <span>Abrir</span>
                 </Dropdown.Item>
             )}
             <Dropdown.Item
@@ -52,21 +52,21 @@ const FileItemDropdown = (props: FileItemDropdownProps) => {
                 onClick={(e) => handleDropdownItemClick(e, onDownload)}
             >
                 <TbCloudDownload className="text-xl" />
-                <span>Download</span>
+                <span>Descargar</span>
             </Dropdown.Item>
             <Dropdown.Item
                 eventKey="rename"
                 onClick={(e) => handleDropdownItemClick(e, onRename)}
             >
                 <TbPencil className="text-xl" />
-                <span>Rename</span>
+                <span>Renombrar</span>
             </Dropdown.Item>
             <Dropdown.Item
                 eventKey="share"
                 onClick={(e) => handleDropdownItemClick(e, onShare)}
             >
                 <TbUserPlus className="text-xl" />
-                <span>Share</span>
+                <span>Compartir</span>
             </Dropdown.Item>
             <Dropdown.Item
                 eventKey="share"
@@ -74,7 +74,7 @@ const FileItemDropdown = (props: FileItemDropdownProps) => {
             >
                 <span className="flex items-center gap-2 text-error">
                     <TbTrash className="text-xl" />
-                    <span>Delete</span>
+                    <span>Eliminar</span>
                 </span>
             </Dropdown.Item>
         </Dropdown>
