@@ -24,6 +24,11 @@ export const protectedRoutes: Routes = [
         path: '/settings',
         component: lazy(() => import('@/views/Settings')),
         authority: [],
+    }, {
+        key: 'files',
+        path: '/files',
+        component: lazy(() => import('@/views/FileManager')),
+        authority: [],
     },
     /** Example purpose only, please remove */
     /*
