@@ -87,7 +87,7 @@ const UploadFile = ({ onDataUpdated }: UploadFileProps) => {
 
         setIsCreatingBranch(true)
         try {
-            await apiCreateAgentBranch({ branch })
+            await apiCreateAgentBranch({ name: branch })
             handleBranchDialogClose()
             onDataUpdated()
             toast.push(
